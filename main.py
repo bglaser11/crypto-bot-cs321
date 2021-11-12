@@ -1,6 +1,6 @@
 import os
 import discord
-from discord.ext import commands, context
+from discord.ext import commands
 from coinbase.wallet.client import Client
 from dotenv import load_dotenv
 import chartGenerator
