@@ -15,3 +15,12 @@ Commands for the bot:
 2. Charts
 
 - View the chart: $chart BTC USD
+
+3. Twitter Check
+
+- Tweet count: $tweetCount BTC
+- Recent tweets: $recentTweet BTC
+
+4. Price Data
+
+- Price data: $pricedata BTC
