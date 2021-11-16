@@ -24,3 +24,8 @@ Commands for the bot:
 4. Price Data
 
 - Price data: $pricedata BTC
+
+5. Help
+
+- For info: $help
+- Specific: $help command
