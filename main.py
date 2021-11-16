@@ -4,6 +4,7 @@ import discord
 from coinbase.wallet.client import Client
 from discord.ext import commands
 from dotenv import load_dotenv
+from bookmarks import bookmarks
 
 import chartGenerator
 
