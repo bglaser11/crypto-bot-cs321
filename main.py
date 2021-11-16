@@ -5,6 +5,9 @@ from coinbase.wallet.client import Client
 from discord.ext import commands
 from dotenv import load_dotenv
 from bookmarks import bookmarks
+import datetime as DT
+from Historic_Crypto import HistoricalData
+import pandas as pd
 
 import chartGenerator
 import tweetFetcher
@@ -115,7 +118,24 @@ async def recentTweet(ctx, base):
     await ctx.send('Recent tweet talking about {}:'.format(base.upper()))
     await ctx.send(tweetFetcher.recentTweet(base))
 
-
+""""
+Command: pricedata
+parameters: base (cryptocurrency)
+returns: price and historic data
+"""
+@bot.command()
+async def pricedata(ctx, base):
+    today = DT.date.today()
+    week_ago = today - DT.timedelta(days=7)
+    weekAgo = week_ago.strftime('%Y-%m-%d-00-00')
+    price = coinbaseClient.get_spot_price(currency_pair='{}-USD'.format(base))
+    await ctx.send('current price of {} in USD is ${:.2f}'.format(base, float(price.amount)))
+    await ctx.send('fetching more data... please wait')
+    HSData = HistoricalData('{}-USD'.format(base),300, weekAgo).retrieve_data()
+    await ctx.send(HSData)
+    
+    
+    
 # exception handler for incorrect input
 @bot.event
 async def on_command_error(ctx, err):
