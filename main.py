@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from bookmarks import bookmarks
 
 import chartGenerator
+import tweetFetcher
 
 load_dotenv()
 
@@ -77,9 +78,11 @@ async def removeBookmark(ctx, base):
         await ctx.send(e)
 
 
-
-#Generates a chart of the price of a chosen cryptocurrency in a chosen currency using chart.py's generateChart function
-#Two args: cryptocurrency's abbreviation and currency's abbreviation
+"""
+Command: chart
+parameters: base (cryptocurrency), currency (default=USD)
+returns: chart a la chartGenerator.generateChart
+"""
 @bot.command()
 async def chart(ctx, base, currency='USD'):
     chartGenerator.generateChart(base, currency)
@@ -88,11 +91,35 @@ async def chart(ctx, base, currency='USD'):
     os.remove('chart.svg')
     os.remove('chart.png')
 
-    #call "$help chart" on bad input?
+"""
+Command: tweetCount
+parameters: base (cryptocurrency)
+returns: amount of tweets talking about base from the past week
+"""
+@bot.command()
+async def tweetCount(ctx, base):
+    coinbaseClient.get_spot_price(currency_pair='{}-USD'.format(base)) #ratchet input validation
+
+    tweetCount = tweetFetcher.tweetCount(base)
+    await ctx.send('{} tweets talking about {} in the past 7 days!'.format(tweetCount,base.upper()))
+
+"""
+Command: recentTweet
+parameters: base (cryptocurrency)
+returns: most recent tweet talking about base
+"""
+@bot.command()
+async def recentTweet(ctx, base):
+    coinbaseClient.get_spot_price(currency_pair='{}-USD'.format(base)) #part 2
+
+    await ctx.send('Recent tweet talking about {}:'.format(base.upper()))
+    await ctx.send(tweetFetcher.recentTweet(base))
+
 
 # exception handler for incorrect input
 @bot.event
 async def on_command_error(ctx, err):
-  await ctx.send("There is a problem with your command. Please check help for more details.") 
+  await ctx.send("There is a problem with your command. Please check help for more details.")
+  print(err)
 
 bot.run(os.environ['DISCORD_TOKEN'])
