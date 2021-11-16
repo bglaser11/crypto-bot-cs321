@@ -88,6 +88,7 @@ returns: chart a la chartGenerator.generateChart
 """
 @bot.command()
 async def chart(ctx, base, currency='USD'):
+    await ctx.send('generating chart please wait...')
     chartGenerator.generateChart(base, currency)
     await ctx.send(file = discord.File('chart.png'))
 
